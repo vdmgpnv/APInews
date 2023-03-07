@@ -8,7 +8,7 @@ from config import db_url
 
 
 engine: AsyncEngine = create_async_engine(
-   db_url, echo=False, echo_pool="debug", isolation_level="AUTOCOMMIT"
+   db_url, echo=False, isolation_level="AUTOCOMMIT"
 )
 DBSession = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
