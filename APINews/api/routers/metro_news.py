@@ -24,7 +24,7 @@ async def get_metro_news(
     ),
     session: AsyncSession = Depends(get_db_session),
 ):
-    date_end = datetime.date.today()
+    date_end = datetime.date.today() + relativedelta(days=1)
     date_begin_timestamp = int((date_end - relativedelta(days=day)).strftime("%s"))
     date_end_timestamp = int(date_end.strftime("%s"))
 
