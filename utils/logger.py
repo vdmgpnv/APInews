@@ -30,6 +30,11 @@ class CustomFormatter(logging.Formatter):
 
 def get_logger():
     logs_format = "%(asctime)s | %(levelname)8s | %(message)s"
+    logging.basicConfig(filename="logname.log",
+                        filemode='a',
+                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                        datefmt='%H:%M:%S',
+                        level=logging.DEBUG)
     logger = logging.getLogger("parser")
     logger.setLevel(logging.DEBUG)
     handler = logging.StreamHandler(stream=sys.stderr)

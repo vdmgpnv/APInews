@@ -4,7 +4,7 @@ from typing import Any, Union
 
 from bs4 import BeautifulSoup, Tag
 
-from parser.base_parser import BaseParser
+from APINews.parser.base_parser import BaseParser
 from utils.logger import logger
 
 
@@ -73,6 +73,7 @@ class MoscowNewsParser(BaseParser):
                 header=header,
                 image_url=image_url,
                 page_link=page_link,
+                tag=self.tag
             )
             return prepared_row
 
