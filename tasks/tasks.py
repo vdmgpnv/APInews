@@ -14,5 +14,9 @@ client = Celery(__name__, broker=config.redis)
 
 @client.task
 def parse_news():
-    parser = MoscowNewsParser(base_url=constants.NEWS_PORTAL_URL, model=News, tag="metro")
-    asyncio.run(parser.parse("/news/tags.php?metro", mode=ResponseMode.TEXT.value))
+    parser = MoscowNewsParser(
+        base_url=constants.NEWS_PORTAL_URL, model=News, tag="metro"
+    )
+    asyncio.get_event_loop().run_until_complete(
+        (parser.parse("/news/tags.php?metro", mode=ResponseMode.TEXT.value))
+    )

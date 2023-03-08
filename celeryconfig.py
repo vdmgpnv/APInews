@@ -1,5 +1,8 @@
+import os
 
-broker_url = 'redis://localhost:6379/0'
+import config
+
+broker_url = os.getenv("REDIS", config.redis)
 imports = ("tasks", )
 worker_disable_rate_limits = True
 timezone = 'Asia/Novosibirsk'

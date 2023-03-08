@@ -25,6 +25,7 @@ class BaseParser:
         logger.info(f"Processing completed, start save {len(processed_data)}, saving...")
         await self.save_data(processed_data)
         logger.info("Successfully saved data")
+        return
 
     async def process_data(self, data: dict[str, Any] | str) -> list[dict[str, Any]]:
         raise NotImplementedError
@@ -38,3 +39,4 @@ class BaseParser:
                     set_={"parse_date": insert_statement.excluded.parse_date},
                 )
             )
+        self.session.close() # без этой строчки не работает в качестве периодической таски
