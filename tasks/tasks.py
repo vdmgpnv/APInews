@@ -14,6 +14,7 @@ client = Celery(__name__, broker=config.redis)
 
 @client.task
 def parse_news():
+    """Просто таска для Celery"""
     parser = MoscowNewsParser(
         base_url=constants.NEWS_PORTAL_URL, model=News, tag="metro"
     )

@@ -13,6 +13,11 @@ class MoscowNewsParser(BaseParser):
         super().__init__(*args, **kwargs)
 
     async def process_data(self, data: dict[str, Any] | str) -> list[dict[str, Any]]:
+        """Функция обработки данных, так как структура сайта немного странная,
+         метод обработки такой же, принимает либо json либо строку,
+         В конкретном случае у нас строка, ищем таблицы с новостями, пробегаемся по каждой
+         записи в таблице, и распаршиваем данные, как нам нужно
+         """
         output_data = []
         soup = BeautifulSoup(data, "html.parser")
         news_tables = soup.find_all("table", {"width": "95%"})
@@ -35,6 +40,12 @@ class MoscowNewsParser(BaseParser):
     async def prepare_row_for_insert(
         self, row: list[Tag]
     ) -> dict[str, Union[datetime.datetime, datetime.date, str]] | None:
+        """Метод обработки строки таблицы с сайта, если картинки не было - ставит нулевое значение
+        На каждой итерации парса возникает ровно 1 исключение, когда реклама с страницы пытается попасть к нам в базу
+        но мы ее игнорируем и просто возращаем None
+
+        при успешном же распаршивании новости вернется словарь, состоящий из необходимых для складирования в базу данных
+        """
         try:
             parse_date = datetime.date.today()
             raw_publication_date = re.findall(

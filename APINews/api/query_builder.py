@@ -9,6 +9,7 @@ from APINews.db.base import Base
 
 
 class QueryBuilder:
+    """Класс принимающий в себя фильтры гет запроса и добаввляющий их к запросу в базу"""
     def __init__(
         self,
         date_begin: datetime.date
