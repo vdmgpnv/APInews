@@ -2,14 +2,15 @@ from typing import Any, Type
 from sqlalchemy.dialects.postgresql import insert
 
 from APINews.db.base import Base, DBSession
-from parser.request_client import RequestClient
+from APINews.parser.request_client import RequestClient
 from utils.exceptions import NoDataError
 from utils.logger import logger
 
 
 class BaseParser:
-    def __init__(self, base_url: str, model: Type["Base"]):
+    def __init__(self, base_url: str, model: Type["Base"], tag: str):
         self.base_url = base_url
+        self.tag = tag
         self.client = RequestClient(base_url)
         self.session = DBSession()
         self.model = model
@@ -24,6 +25,7 @@ class BaseParser:
         logger.info(f"Processing completed, start save {len(processed_data)}, saving...")
         await self.save_data(processed_data)
         logger.info("Successfully saved data")
+        return
 
     async def process_data(self, data: dict[str, Any] | str) -> list[dict[str, Any]]:
         raise NotImplementedError
@@ -37,3 +39,4 @@ class BaseParser:
                     set_={"parse_date": insert_statement.excluded.parse_date},
                 )
             )
+        self.session.close() # без этой строчки не работает в качестве периодической таски

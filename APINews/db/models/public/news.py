@@ -18,3 +18,5 @@ class News(Base):
     header: str = Column("header", String, nullable=False)
     image_url: str = Column("image_url", Text, default=None, nullable=True)
     page_link: str = Column("page_link", Text, nullable=False)
+    tag: str = Column("tag", String, nullable=True)
+

@@ -8,3 +8,6 @@ db_host = os.getenv("DB_HOST", config_local.db_host)
 db_port = os.getenv("DB_PORT", config_local.db_port)
 
 db_url = f"postgresql+asyncpg://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+
+redis = os.getenv("REDIS", config_local.redis)
+
