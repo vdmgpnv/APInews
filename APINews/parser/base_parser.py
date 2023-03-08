@@ -8,6 +8,10 @@ from utils.logger import logger
 
 
 class BaseParser:
+    """Базовый класс парсера, принимающий сайт, который парсим,
+    модель таблицы, в которую будут вставляться данные
+    а так же тэг, который отображает смысл новости(метро, дороги и тд)
+    """
     def __init__(self, base_url: str, model: Type["Base"], tag: str):
         self.base_url = base_url
         self.tag = tag
@@ -16,6 +20,8 @@ class BaseParser:
         self.model = model
 
     async def parse(self, path: str, mode: str):
+        """Основная функция, которая запускает парс, принимает путь запроса и мод,
+         в котором ожидается ответ от сервера"""
         logger.info(f"Start parse {self.base_url + path}")
         raw_data = await self.client.request(url=path, mode=mode)
         if not raw_data:
@@ -28,9 +34,11 @@ class BaseParser:
         return
 
     async def process_data(self, data: dict[str, Any] | str) -> list[dict[str, Any]]:
+        """Функция обработки спаршенных данных, необходимо переопределиять"""
         raise NotImplementedError
 
     async def save_data(self, data: list[dict[str, Any]]) -> None:
+        """Метод сохранения в базу"""
         insert_statement = insert(self.model).values(data)
         async with self.session as session:
             await session.execute(

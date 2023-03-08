@@ -7,6 +7,7 @@ from utils.logger import logger
 
 
 class RequestClient:
+    """Клиент для создания запросов, принимает базовую урлу, может быть расширен"""
     def __init__(self, base_url: str):
         self.base_url: str = base_url
         self.session: AsyncClient = AsyncClient()
@@ -22,6 +23,10 @@ class RequestClient:
         mode: str = "json",
         retries: int = 3,
     ) -> Union[dict[str, Any], str, Cookies, bytes, None]:
+        """Функция выполняющая запрос к серверу, в зависимости
+         от переданного ей мода, вернет данные в разных форматах
+         При написании функции преследовалась цель сделать ее как можно более универсальной
+         """
         attempts = 1
         while attempts < retries:
             try:
