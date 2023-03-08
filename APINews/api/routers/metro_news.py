@@ -25,7 +25,8 @@ async def get_metro_news(
     session: AsyncSession = Depends(get_db_session),
 ):
     date_end = datetime.date.today()
-    date_begin = date_end - relativedelta(days=day)
+    date_begin_timestamp = int((date_end - relativedelta(days=day)).strftime("%s"))
+    date_end_timestamp = int(date_end.strftime("%s"))
 
     query = (
         select(
@@ -36,7 +37,7 @@ async def get_metro_news(
             News.image_url,
         )
         .select_from(News)
-        .where(News.parse_date.between(date_begin, date_end))
+        .where(News.publication_date >= date_begin_timestamp, News.publication_date <= date_end_timestamp)
     )
 
     result = await session.execute(query)
